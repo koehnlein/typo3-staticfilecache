@@ -11,6 +11,7 @@ use SFC\Staticfilecache\Domain\Repository\QueueRepository;
 use SFC\Staticfilecache\Service\QueueService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -28,8 +29,8 @@ class BoostQueueCommand extends AbstractCommand
         parent::configure();
         $this->setDescription('Run (work on) the cache boost queue.');
 
-        $this->addArgument('limit-items', InputArgument::OPTIONAL, 'Limit the items that are crawled. 0 => all', 0);
-        $this->addArgument('stop-processing-after', InputArgument::OPTIONAL, 'Stop crawling new items after N seconds since scheduler task started. 0 => infinite', 0);
+        $this->addOption('limit-items', null, InputOption::VALUE_OPTIONAL, 'Limit the items that are crawled. 0 => all', 0);
+        $this->addOption('stop-processing-after', null, InputOption::VALUE_OPTIONAL, 'Stop crawling new items after N seconds since scheduler task started. 0 => infinite', 0);
         $this->addArgument('avoid-cleanup', InputArgument::OPTIONAL, 'Avoid the cleanup of the queue items', 0);
     }
 
@@ -57,8 +58,8 @@ class BoostQueueCommand extends AbstractCommand
         $io = new SymfonyStyle($input, $output);
 
         $startTime = \time();
-        $stopProcessingAfter = (int)$input->getArgument('stop-processing-after');
-        $limit = (int)$input->getArgument('limit-items');
+        $stopProcessingAfter = (int)$input->getOption('stop-processing-after');
+        $limit = (int)$input->getOption('limit-items');
         $limit = $limit > 0 ? $limit : 5000;
         $rows = $queueRepository->findOpen($limit);
 
