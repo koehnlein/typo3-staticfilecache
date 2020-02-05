@@ -39,7 +39,7 @@ class CacheCommandController extends CommandController
      */
     public function runCacheBoostQueueCommand($limitItems = 0, $stopProcessingAfter = 0)
     {
-        $input = new StringInput(sprintf('--limit-items=%d --stop-processing-after=%d', $limitItems, $stopProcessingAfter));
+        $input = new StringInput(sprintf('%d %d', $limitItems, $stopProcessingAfter));
         $output = new BufferedOutput();
 
         $queue = GeneralUtility::makeInstance(BoostQueueRunCommand::class);
